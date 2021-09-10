@@ -2,8 +2,8 @@
   应用根组件
 */
 import React from "react"
-import { Button, message } from "antd"
-import { BrowserRouter, HashRouter, Switch, Route } from "react-router-dom"
+import { message } from "antd"
+import { HashRouter, Switch, Route } from "react-router-dom"
 import Login from "./pages/login/login.jsx"
 import Admin from "./pages/admin/admin.jsx"
 
@@ -15,12 +15,12 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <BrowserRouter>
+            <HashRouter>
                 <Switch>
                     <Route path="/login" component={Login}/>
                     <Route path="/" component={Admin}/>
                 </Switch>
-            </BrowserRouter>
+            </HashRouter>
         )
     }
 }

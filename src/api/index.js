@@ -2,23 +2,27 @@
   包含应用中所有请求接口的函数：接口请求函数
 */
 import ajax from "./ajax"
-const BASE = "http://localhost:5000"
-//const BASE = ""
+//const BASE = "http://localhost:5000"
+const BASE = ""
 
 //请求登录
-export function reqLogin(username, password) {
+/* export const reqLogin = (username, password) => (
     ajax({
         methed: "post",
         url: BASE + "/login",
-        data: {
+        data: {    //data是对象，默认使用json格式的请求体携带参数数据
             username,
             password
         }
+        // data: qs.stringify({ username, password })
     })
-}
+) */
+export const reqLogin = (username, password) => ajax.post(BASE + "/login", { username, password })
 
-const name = "admin"
+/* const name = "admin"
 const pwd = "admin"
-reqLogin(name, pwd)
-
+reqLogin(name, pwd).then(result => {
+    //const result = response.data
+    console.log("请求成功了", result)
+}) */
 //将实参数据赋值形参变量
