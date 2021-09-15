@@ -3,7 +3,8 @@ import logo from "./images/logo.png"
 import "./login.css"
 import { Form, Icon, Input, Button, message } from 'antd';
 import { reqLogin } from "../../api"
-const Item = Form.Item
+import storageUtils from "../../utils/storageUtils"
+import { Redirect } from "react-router-dom"
 
 class Login extends Component {
 
@@ -26,9 +27,14 @@ class Login extends Component {
                 const result = await reqLogin(username, password)
                 //登陆成功
                 if (result.status === 0) {
-                //跳转到管理界面admin
-                this.props.history.replace("/")
-                message.success("登录成功！")
+                    //将user信息保存到local
+                    const user = result.data
+                    //localStorage.setItem("user_key", JSON.stringify(user))
+                    storageUtils.saveUser(user)
+
+                    //跳转到管理界面admin
+                    this.props.history.replace("/")
+                    message.success("登录成功！")
                 } else {    //登录失败
                     message.error(result.msg)
                 }
@@ -48,19 +54,27 @@ class Login extends Component {
         // （4）必须是英文，数字或下划线组成
         //  (5) 自定义验证
         if (!value) {
-            callback("密码必须输入")
+            return Promise.reject("密码必须输入")
         } else if (value.length < 4) {
-            callback("密码不能小于4位")
+            return Promise.reject("密码不能小于4位")
         } else if (value.length > 12) {
-            callback("密码不能大于12位")
+            return Promise.reject("密码不能大于12位")
         } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-            callback("密码必须是英文，数字或下划线组成")
+            return Promise.reject("密码必须是英文，数字或下划线组成")
         } else {
-            callback()
+            return Promise.resolve()
         }
     }
 
     render() {
+
+        //读取保存的user，如果存在，直接跳转到管理界面
+        //const user = JSON.parse(localStorage.getItem("user_key") || "{}")
+        const user = storageUtils.getUser()
+        if (user._id) {
+            //this.props.history.replace("/login")  //事件回调函数中进行路由跳转
+            return <Redirect to="/" />  //自动跳转到指定的路由路径
+        }
 
         return (
             <div className="login">
@@ -71,7 +85,7 @@ class Login extends Component {
                 <div className="login-content">
                     <h1>用户登录</h1>
 
-                    <Form onFinish={this.handleSubmit} className="login-form">
+                    <Form onSubmit={this.handleSubmit} className="login-form">
                         <Form.Item name="username" initialValue="" rules={[
                             // （1）必须输入
                             // （2）必须大于等于4位
