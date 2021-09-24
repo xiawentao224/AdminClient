@@ -1,0 +1,22 @@
+.left-nav{
+    color:white
+}
+
+.left-nav-link{
+    height: 80px;
+    background-color: #002140;
+    display:flex;
+    align-items:center;
+}
+
+.left-nav-link img{
+    width:40px;
+    height: 40px;
+    margin:0 10px;
+}
+
+.left-nav-link h1{
+    color:white;
+    font-size:25px;
+    margin-bottom:0;
+}

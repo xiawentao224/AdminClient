@@ -20,7 +20,6 @@ const BASE = ""
 ) */
 export const reqLogin = (username, password) => ajax.post(BASE + "/login", { username, password })
 
-reqLogin("admin","admin")
 /* const name = "admin"
 const pwd = "admin"
 reqLogin(name, pwd).then(result => {

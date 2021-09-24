@@ -1,50 +1,74 @@
 import React, { Component } from 'react'
-import logo from "./images/logo.png"
+import logo from "../../assets/images/logo.png"
 import "./login.css"
 import { Form, Icon, Input, Button, message } from 'antd';
 import { reqLogin } from "../../api"
 import storageUtils from "../../utils/storageUtils"
 import { Redirect } from "react-router-dom"
+import memoryUtils from "../../utils/memoryUtils"
 
 class Login extends Component {
 
-    handleSubmit = e => {
-        //阻止事件的默认行为：阻止表单的提交
-        e.preventDefault();
+    // handleSubmit = e => {
+    //     //阻止事件的默认行为：阻止表单的提交
+    //     console.log("a");
+    //     // e.preventDefault();
 
-        //取出输入的相关的数据
-        const form = this.props.form
-        const values = form.getFieldsValue()
-        const username = form.getFieldValue("username")
-        const password = form.getFieldValue("password")
+    //     //取出输入的相关的数据
+    //     // const form = this.props.form
+    //     // const values = form.getFieldsValue()
+    //     // const username = form.getFieldValue("username")
+    //     // const password = form.getFieldValue("password")
 
-        console.log(values, username, password)
+    //     // console.log(values, username, password)
 
-        //对表单所有字段进行统一验证
-        this.props.form.validateFields(async (err, { username, password }) => {
-            if (!err) {
-                //alert('发送登录的ajax请求,username=${values.username},password=${values.password}')
-                const result = await reqLogin(username, password)
-                //登陆成功
-                if (result.status === 0) {
-                    //将user信息保存到local
-                    const user = result.data
-                    //localStorage.setItem("user_key", JSON.stringify(user))
-                    storageUtils.saveUser(user)
+    //     //对表单所有字段进行统一验证
+    //     this.props.form.validateFields(async (err, { username, password }) => {
+    //         if (!err) {
+    //             //alert('发送登录的ajax请求,username=${values.username},password=${values.password}')
+    //             const result = await reqLogin(username, password)
+    //             //登陆成功
+    //             if (result.status === 0) {
+    //                 //将user信息保存到local
+    //                 const user = result.data
+    //                 //localStorage.setItem("user_key", JSON.stringify(user))
+    //                 storageUtils.saveUser(user)
 
-                    //跳转到管理界面admin
-                    this.props.history.replace("/")
-                    message.success("登录成功！")
-                } else {    //登录失败
-                    message.error(result.msg)
-                }
+    //                 //跳转到管理界面admin
+    //                 this.props.history.replace("/admin")
+    //                 message.success("登录成功！")
+    //             } else {    //登录失败
+    //                 message.error(result.msg)
+    //             }
 
-            } else {
-                //alert("验证失败!")
-            }
-        })
+    //         } else {
+    //             //alert("验证失败!")
+    //         }
+    //     })
+    // }
 
+
+    
+    //对表单所有字段进行统一验证
+    onFinish = async (values) => {
+        console.log(values);
+        const { username, password } = values;
+        let result = await reqLogin(username, password)
+        const { status, msg } = result;
+        console.log(result);
+        if (status === 0) {
+            //将user信息保存到local中
+            storageUtils.saveUser(result.data)
+            //保存到内存中
+            memoryUtils.user = result.data
+            this.props.history.replace("/")
+            message.success("登录成功！")
+        } else {
+            message.error(msg, 2)
+        }
     }
+
+
 
     validatePwd = (rules, value, callback) => {
         value = value.trim()
@@ -70,7 +94,7 @@ class Login extends Component {
 
         //读取保存的user，如果存在，直接跳转到管理界面
         //const user = JSON.parse(localStorage.getItem("user_key") || "{}")
-        const user = storageUtils.getUser()
+        const user = memoryUtils.user
         if (user._id) {
             //this.props.history.replace("/login")  //事件回调函数中进行路由跳转
             return <Redirect to="/" />  //自动跳转到指定的路由路径
@@ -85,7 +109,7 @@ class Login extends Component {
                 <div className="login-content">
                     <h1>用户登录</h1>
 
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form onFinish={this.onFinish} className="login-form">
                         <Form.Item name="username" initialValue="" rules={[
                             // （1）必须输入
                             // （2）必须大于等于4位
@@ -124,6 +148,8 @@ class Login extends Component {
         )
     }
 }
+
+
 
 const WrapperForm = (Login)
 

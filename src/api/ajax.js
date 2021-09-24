@@ -4,6 +4,7 @@
   2.让请求成功的结果不再是response，而是response.data的值
   3.统一处理所有请求的异常错误
 */
+import { message } from "antd";
 import axios from "axios"
 import qs from "qs"
 
@@ -26,9 +27,10 @@ axios.interceptors.response.use(function(response){
   return response.data;   //返回的结果就会交给我们指定的请求响应的回调
 
 },function(error){     //统一处理所有请求的异常错误
- alert("请求出错"+error.message)
+ //alert("请求出错"+error.message)
  //return Promise.reject(error);
  //返回一个pending状态的promise,中断Promise链
+ message.error(error.message,3)
  return new Promise(()=>{})
 });
 
