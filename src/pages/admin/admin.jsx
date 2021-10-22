@@ -7,12 +7,14 @@ import Header from "../../component/header"
 
 import Home from "../home/home.jsx"
 import Category from "../category/category.jsx"
-import Product from "../product/product.jsx"
+import ProductHome from "../product/productHome.jsx"
+import Detail from "../product/detail.jsx"
 import Role from "../role/role.jsx"
 import User from "../user/user.jsx"
 import Bar from "../charts/bar.jsx"
 import Line from "../charts/line.jsx"
 import Pie from "../charts/pie.jsx"
+import ProductAddUpdate from "../../pages/product/add-update"
 
 const { Footer, Sider, Content } = Layout;
 
@@ -34,11 +36,13 @@ export default class Admin extends Component {
                 </Sider>
                 <Layout>
                     <Header />
-                    <Content style={{ background: "white" }}>
+                    <Content style={{ background: "white", margin: "20px" }}>
                         <Switch>
                             <Route path="/home" component={Home}></Route>
                             <Route path="/category" component={Category}></Route>
-                            <Route path="/product" component={Product}></Route>
+                            <Route path="/product" component={ProductHome}></Route>
+                            <Route path="/detail" component={Detail}></Route>
+                            <Route path="/add-update" component={ProductAddUpdate}></Route>
                             <Route path="/role" component={Role}></Route>
                             <Route path="/user" component={User}></Route>
                             <Route path="/charts/bar" component={Bar}></Route>

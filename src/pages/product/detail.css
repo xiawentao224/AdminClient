@@ -1,0 +1,19 @@
+.detail{
+
+}
+
+.detail-left{
+   font-size:25px;
+   font-weight:bold;   
+}
+
+.detail-right{
+    font-size:25px;
+}
+
+.detail-img{
+    width:200px;
+    height:200px;
+    border:2px solid black;
+    margin-right:20px;
+}

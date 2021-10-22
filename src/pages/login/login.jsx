@@ -47,9 +47,7 @@ class Login extends Component {
     //     })
     // }
 
-
     
-    //对表单所有字段进行统一验证
     onFinish = async (values) => {
         console.log(values);
         const { username, password } = values;
@@ -69,7 +67,7 @@ class Login extends Component {
     }
 
 
-
+    //自定义验证
     validatePwd = (rules, value, callback) => {
         value = value.trim()
         // （1）必须输入
